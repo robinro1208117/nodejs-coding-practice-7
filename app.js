@@ -29,12 +29,19 @@ const intializeDbServer = async () => {
   }
 };
 
+const convertPlayerDbObjectToResponseObject = (dbObject) => {
+  return {
+    playerId: dbObject.player_id,
+    playerName: dbObject.player_name,
+  };
+};
+
 app.get("/players/", async (req, res) => {
   try {
-    const sql = `SELECT player_id as playerId,player_name as playerName FROM player_details`;
+    const sql = `SELECT * FROM player_details`;
     const val = await db.all(sql);
     console.log(val);
-    res.send(val);
+    res.send(val.map((each) => convertPlayerDbObjectToResponseObject(each)));
   } catch (err) {
     console.log(err);
     res.send(400);
@@ -83,7 +90,7 @@ app.get("/players/:playerId/matches", async (req, res) => {
   try {
     const { playerId } = req.params;
     const sql = `SELECT match.match_id as matchId,match.match as match,match.year as year from player_match_score AS pm INNER JOIN match_details as match ON pm.match_id=match.match_id WHERE pm.player_id=${playerId}`;
-    const cal = await db.get(sql);
+    const cal = await db.all(sql);
     res.send(cal);
   } catch (err) {
     console.log(err);
