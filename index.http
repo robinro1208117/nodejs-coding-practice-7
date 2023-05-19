@@ -1,0 +1,25 @@
+GET http://localhost:501/players/
+###
+
+GET http://localhost:501/players/7/
+###
+
+PUT http://localhost:501/players/7/
+Content-Type: application/json
+
+{
+    "playerName":"Raj" 
+} 
+
+###
+GET http://localhost:501/matches/7/
+
+### 
+GET http://localhost:501/players/7/matches
+
+###
+GET http://localhost:501/matches/10/players
+
+###
+GET http://localhost:501/players/7/playerScores
+
